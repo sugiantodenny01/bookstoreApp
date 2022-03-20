@@ -8,4 +8,4 @@ It is a just simple tutorial or example for making simple RESTful API with Go us
 
 # Basic Data Structure (Database)
 
-![alt text](https://github.com/sugiantodenny01/bookstoreApp/assets/Db.jpg?raw=true)
+![alt text](https://github.com/sugiantodenny01/bookstoreApp/assets/Db.JPG?raw=true)
