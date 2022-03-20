@@ -23,7 +23,6 @@ func NewRouter(authorController controller.AuthorController, bookController cont
 	router.Post(conf.Host+"/author/refresh_token", authorController.RefreshTokenController)
 	router.Put(conf.Host+"/author/update", middleware.IsAuthenticatedAccessToken, authorController.UpdateProfileAuthorController)
 	router.Get(conf.Host+"/author/get_my_profile", middleware.IsAuthenticatedAccessToken, authorController.AuthorProfileController)
-	//router.Post(conf.Host+"/upload", uploadImage)
 	router.Static(conf.Host+"/assets/", "./assets")
 
 	//Book
@@ -31,36 +30,3 @@ func NewRouter(authorController controller.AuthorController, bookController cont
 
 	return router
 }
-
-//func uploadImage(c *fiber.Ctx) error {
-//
-//	type upload struct {
-//		Image string `json:"Image"`
-//	}
-//
-//	var img upload
-//	var f *os.File
-//
-//	err := c.BodyParser(&img)
-//	if err != nil {
-//		err = errors.New("error_param")
-//		getInformationError := web.ToFailResponse(err, "Ketentuan Path Param / Query Param  untuk Pemanggilan API tidak sesuai")
-//		return c.JSON(getInformationError)
-//	}
-//
-//	fmt.Println(img)
-//	unbased, _ := base64.StdEncoding.DecodeString(string(img.Image))
-//	jpgI, err := jpeg.Decode(bytes.NewReader(unbased))
-//
-//	if err != nil {
-//		return err
-//	}
-//	path, _ := os.Getwd()
-//	newpath := path + "/assets/" + "\\image"
-//	f, _ = os.OpenFile(newpath+".jpg", os.O_WRONLY|os.O_CREATE, 0777)
-//	png.Encode(f, jpgI)
-//	fmt.Println("jpg generated")
-//
-//	return nil
-//
-//}

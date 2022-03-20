@@ -7,4 +7,5 @@ import (
 
 type BookRepository interface {
 	AddBookRepository(tx *sql.Tx, book model.Book) error
+	//GetBookByIdRepository(tx *sql.Tx, book model.Book) (model.Book, error)
 }

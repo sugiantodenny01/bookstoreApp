@@ -38,3 +38,17 @@ func (b *BookRepositoryImpl) AddBookRepository(tx *sql.Tx, book model.Book) erro
 	return nil
 
 }
+
+//func (b *BookRepositoryImpl) GetBookByIdRepository(tx *sql.Tx, book model.Book) (model.Book, error) {
+//
+//	var author model.Author
+//	SQL := "select Book_ID,Author_ID,Title,Summary,Stock, Price, from author where Author_ID = (?)"
+//	resultCheckEmailExists := tx.QueryRow(SQL, book.Author_ID)
+//	errorResultCheckEmailExists := resultCheckEmailExists.Scan(&author.Author_ID)
+//
+//	if errorResultCheckEmailExists == sql.ErrNoRows {
+//		err := errors.New("error_author_id_not_found")
+//		return author, err
+//	}
+//
+//}

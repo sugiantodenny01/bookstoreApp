@@ -9,6 +9,7 @@ type Config struct {
 	DB_PORT     string
 	DB_NAME     string
 	Host        string
+	Port_App    string
 }
 
 func GetConfig() Config {

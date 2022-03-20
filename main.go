@@ -10,6 +10,8 @@ import (
 func main() {
 
 	db := app.NewDB()
+	conf := app.GetConfig()
+
 	//author
 	authorRepository := repository.NewAuthorRepository()
 	authorService := services.NewAuthorService(authorRepository, db)
@@ -22,6 +24,6 @@ func main() {
 
 	router := app.NewRouter(categoryController, bookController)
 	app := router
-	app.Listen(":12345")
+	app.Listen(conf.Port_App)
 
 }
