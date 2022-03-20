@@ -4,7 +4,7 @@ Go Book Store REST API Example
 
 A RESTful API example for simple Book Store application with Go
 
-It is a just simple tutorial or example for making simple RESTful API with Go using Fiber (A nice framework), token security using JWT and Goconfig to configure the applicaton
+This is a simple tutorial or example to create a simple RESTful API with Go using Fiber (a nice framework), security tokens using JWT and Goconfig to configure the application
 
 # Basic Data Structure (Database)
 
