@@ -17,7 +17,7 @@ func NewSalesRepository() SalesRepository {
 func (s *SalesRepositoryImpl) GetInformationBookRepo(tx *sql.Tx, sales web.SalesAddRequest) (web.BookResponse, error) {
 
 	var bookData web.BookResponse
-	SQL := "select Price_Per_Unit from book where Book_ID = (?)"
+	SQL := "select Price from book where Book_ID = (?)"
 	resultCheckExists := tx.QueryRow(SQL, sales.Book_ID)
 	errorResultCheckExists := resultCheckExists.Scan(&bookData.Price)
 
@@ -42,7 +42,7 @@ func (s *SalesRepositoryImpl) AddSalesRepository(tx *sql.Tx, sales web.SalesAddR
 		return err
 	}
 
-	SQlInsert := `insert into sales(Author_id, Recipient_Name, Recipient_Email, Book_Title, Quantity, Price_Per_Unit, Price_Total)" +
+	SQlInsert := `insert into sales(Author_id, Recipient_Name, Recipient_Email, Book_Title, Quantity, Price_Per_Unit, Price_Total)
 				  values(?,?,?,?,?,?,?)`
 	_, err := tx.Exec(SQlInsert, sales.Author_ID, sales.Name, sales.Email, bookData, sales.Quantity, sales.Price_Per_Unit, sales.Price_Total)
 

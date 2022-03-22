@@ -31,6 +31,7 @@ func (s *SalesServiceImpl) AddSalesService(sales web.SalesAddRequest, c *fiber.C
 	tx, err := s.DB.Begin()
 
 	if err != nil {
+		tx.Rollback()
 		return errors.New("error_internal_server")
 	}
 
@@ -41,6 +42,7 @@ func (s *SalesServiceImpl) AddSalesService(sales web.SalesAddRequest, c *fiber.C
 	dataBook, err := s.salesRepo.GetInformationBookRepo(tx, bookInformation)
 
 	if err != nil {
+		tx.Rollback()
 		return err
 	}
 
@@ -52,9 +54,10 @@ func (s *SalesServiceImpl) AddSalesService(sales web.SalesAddRequest, c *fiber.C
 	err = s.salesRepo.AddSalesRepository(tx, sales)
 
 	if err != nil {
+		tx.Rollback()
 		return err
 	}
-
+	tx.Commit()
 	return nil
 
 }
@@ -68,6 +71,7 @@ func (s *SalesServiceImpl) GetMySalesByIdService(sales model.Sales, c *fiber.Ctx
 	tx, err := s.DB.Begin()
 
 	if err != nil {
+		tx.Rollback()
 		return mock, errors.New("error_internal_server")
 	}
 
@@ -78,9 +82,10 @@ func (s *SalesServiceImpl) GetMySalesByIdService(sales model.Sales, c *fiber.Ctx
 
 	dataSales, err := s.salesRepo.GetInformationSalesById(tx, salesInformation)
 	if err != nil {
+		tx.Rollback()
 		return mock, err
 	}
-
+	tx.Commit()
 	return dataSales, nil
 
 }
