@@ -19,10 +19,15 @@ func main() {
 
 	//Book
 	bookRepository := repository.NewBookRepository()
-	bookService := services.NewBookService(bookRepository, db, conf.Port_App, conf.Host)
+	bookService := services.NewBookService(bookRepository, db, conf.Port_App)
 	bookController := controller.NewBookController(bookService)
 
-	router := app.NewRouter(categoryController, bookController)
+	//sales
+	salesRepository := repository.NewSalesRepository()
+	salesService := services.NewSalesService(salesRepository, db)
+	salesController := controller.NewSalesController(salesService)
+
+	router := app.NewRouter(categoryController, bookController, salesController)
 	app := router
 	app.Listen(conf.Port_App)
 

@@ -36,6 +36,17 @@ type BookResponse struct {
 	Author_Pen_name string
 }
 
+type SalesByIdResponse struct {
+	Sales_ID        int
+	Recipient_Name  int
+	Recipient_Email string
+	Book_Title      string
+	Author_ID       int
+	Quantity        int
+	Price_Per_Unit  string
+	Created_Time    int
+}
+
 type PageInfo struct {
 	Current_Page      int
 	Max_Data_Per_Page int

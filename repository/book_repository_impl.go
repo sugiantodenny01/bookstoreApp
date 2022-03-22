@@ -20,12 +20,12 @@ func NewBookRepository() BookRepository {
 
 func (b *BookRepositoryImpl) AddBookRepository(tx *sql.Tx, book model.Book) error {
 
-	var author model.Author
+	var bookData model.Book
 	SQL := "select Author_ID from author where Author_ID = (?)"
-	resultCheckEmailExists := tx.QueryRow(SQL, book.Author_ID)
-	errorResultCheckEmailExists := resultCheckEmailExists.Scan(&author.Author_ID)
+	resultCheckExists := tx.QueryRow(SQL, book.Author_ID)
+	errorResultCheckExists := resultCheckExists.Scan(&bookData.Author_ID)
 
-	if errorResultCheckEmailExists == sql.ErrNoRows {
+	if errorResultCheckExists == sql.ErrNoRows {
 		err := errors.New("error_author_id_not_found")
 		return err
 	}

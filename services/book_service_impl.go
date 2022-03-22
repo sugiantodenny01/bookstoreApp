@@ -25,15 +25,13 @@ type BookServiceImpl struct {
 	BookRepository repository.BookRepository
 	DB             *sql.DB
 	port           string
-	host           string
 }
 
-func NewBookService(book repository.BookRepository, DB *sql.DB, p string, h string) BookService {
+func NewBookService(book repository.BookRepository, DB *sql.DB, p string) BookService {
 	return &BookServiceImpl{
 		BookRepository: book,
 		DB:             DB,
 		port:           p,
-		host:           h,
 	}
 }
 
@@ -132,7 +130,7 @@ func (service *BookServiceImpl) GetBookByIdService(request string) (web.BookResp
 
 	data, err := service.BookRepository.GetBookByIdRepository(tx, bookInformation)
 
-	locationImageUrl := service.port + "/" + service.host + data.Cover_URL
+	locationImageUrl := service.port + data.Cover_URL
 	data.Cover_URL = locationImageUrl
 
 	if err != nil {
@@ -161,7 +159,7 @@ func (service *BookServiceImpl) GetAllBookService(page string, max string) ([]we
 	data, countValData, err := service.BookRepository.GetAllBookRepository(tx, maxStatus)
 
 	for i := range data {
-		data[i].Cover_URL = service.port + "/" + service.host + data[i].Cover_URL
+		data[i].Cover_URL = service.port + data[i].Cover_URL
 	}
 
 	maxPage := math.Ceil(float64(countValData) / float64(maxStatus))
@@ -202,7 +200,7 @@ func (service *BookServiceImpl) GetMyBookService(page string, max string, c *fib
 	}
 
 	for i := range data {
-		data[i].Cover_URL = service.port + "/" + service.host + data[i].Cover_URL
+		data[i].Cover_URL = service.port + data[i].Cover_URL
 	}
 
 	maxPage := math.Ceil(float64(countValData) / float64(maxStatus))

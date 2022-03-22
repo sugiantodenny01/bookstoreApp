@@ -22,10 +22,10 @@ func (repo *AuthorRepositoryImpl) RegisterRepository(tx *sql.Tx, ar model.Author
 	var author model.Author
 
 	SQL := "select * from author where Email = (?)"
-	resultCheckEmailExists := tx.QueryRow(SQL, ar.Email)
-	errorResultCheckEmailExists := resultCheckEmailExists.Scan(author)
+	resultCheckExists := tx.QueryRow(SQL, ar.Email)
+	errorResultCheckExists := resultCheckExists.Scan(author)
 
-	if errorResultCheckEmailExists == sql.ErrNoRows {
+	if errorResultCheckExists == sql.ErrNoRows {
 
 		SQLInsert := "insert into author(Name, Pen_Name, Email,Password, Created_Time) Values (?,?,?,?,?)"
 		currentTime := time.Now()
@@ -48,15 +48,15 @@ func (repo *AuthorRepositoryImpl) LoginRepository(tx *sql.Tx, ar model.Author) (
 	var author model.Author
 
 	SQL := "select * from author where Email = (?) and Is_Disabled = (?) "
-	resultCheckEmailExists := tx.QueryRow(SQL, ar.Email, 0)
-	errorResultCheckEmailExists := resultCheckEmailExists.Scan(&author.Author_ID, &author.Name, &author.Pen_Name, &author.Email, &author.Password, &author.Is_Disabled, &author.Created_Time)
+	resultCheckExists := tx.QueryRow(SQL, ar.Email, 0)
+	errorResultCheckExists := resultCheckExists.Scan(&author.Author_ID, &author.Name, &author.Pen_Name, &author.Email, &author.Password, &author.Is_Disabled, &author.Created_Time)
 
-	if errorResultCheckEmailExists != nil {
-		fmt.Println(errorResultCheckEmailExists)
+	if errorResultCheckExists != nil {
+		fmt.Println(errorResultCheckExists)
 
 	}
 
-	if errorResultCheckEmailExists == sql.ErrNoRows {
+	if errorResultCheckExists == sql.ErrNoRows {
 
 		err := errors.New("error_email_not_found")
 		return author, err
@@ -106,10 +106,10 @@ func (repo *AuthorRepositoryImpl) ChangePasswordRepository(tx *sql.Tx, ar model.
 	var author model.Author
 
 	SQL := "select Password from author where Author_ID = (?)"
-	resultCheckEmailExists := tx.QueryRow(SQL, ar.Author_ID)
-	errorResultCheckEmailExists := resultCheckEmailExists.Scan(&author.Password)
+	resultCheckExists := tx.QueryRow(SQL, ar.Author_ID)
+	errorResultCheckExists := resultCheckExists.Scan(&author.Password)
 
-	if errorResultCheckEmailExists == sql.ErrNoRows {
+	if errorResultCheckExists == sql.ErrNoRows {
 		err := errors.New("error_author_id_not_found")
 		return err
 	}
@@ -134,10 +134,10 @@ func (repo *AuthorRepositoryImpl) ChangePasswordRepository(tx *sql.Tx, ar model.
 func (repo *AuthorRepositoryImpl) UpdateAuthorRepository(tx *sql.Tx, ar web.AuthorUpdateProfileRequest) error {
 	var author model.Author
 	SQL := "select Author_ID from author where Author_ID = (?)"
-	resultCheckEmailExists := tx.QueryRow(SQL, ar.Author_ID)
-	errorResultCheckEmailExists := resultCheckEmailExists.Scan(&author.Author_ID)
+	resultCheckExists := tx.QueryRow(SQL, ar.Author_ID)
+	errorResultCheckExists := resultCheckExists.Scan(&author.Author_ID)
 
-	if errorResultCheckEmailExists == sql.ErrNoRows {
+	if errorResultCheckExists == sql.ErrNoRows {
 		err := errors.New("error_author_id_not_found")
 		return err
 	}
@@ -158,10 +158,10 @@ func (repo *AuthorRepositoryImpl) AuthorProfileRepository(tx *sql.Tx, ar model.A
 
 	var author web.AuthorProfileResponse
 	SQL := "select Author_ID, NAME , Pen_Name, Email from author where Author_ID = (?)"
-	resultCheckEmailExists := tx.QueryRow(SQL, ar.Author_ID)
-	errorResultCheckEmailExists := resultCheckEmailExists.Scan(&author.Author_ID, &author.Name, &author.Pen_Name, &author.Email)
+	resultCheckExists := tx.QueryRow(SQL, ar.Author_ID)
+	errorResultCheckExists := resultCheckExists.Scan(&author.Author_ID, &author.Name, &author.Pen_Name, &author.Email)
 
-	if errorResultCheckEmailExists == sql.ErrNoRows {
+	if errorResultCheckExists == sql.ErrNoRows {
 		err := errors.New("error_author_id_not_found")
 		return author, err
 	}
@@ -174,10 +174,10 @@ func (repo *AuthorRepositoryImpl) DeleteAuthorRepository(tx *sql.Tx, ar model.Au
 
 	var author model.Author
 	SQL := "select Author_ID from author where Author_ID = (?)"
-	resultCheckEmailExists := tx.QueryRow(SQL, ar.Author_ID)
-	errorResultCheckEmailExists := resultCheckEmailExists.Scan(&author.Author_ID)
+	resultCheckExists := tx.QueryRow(SQL, ar.Author_ID)
+	errorResultCheckExists := resultCheckExists.Scan(&author.Author_ID)
 
-	if errorResultCheckEmailExists == sql.ErrNoRows {
+	if errorResultCheckExists == sql.ErrNoRows {
 		err := errors.New("error_author_id_not_found")
 		return err
 	}
