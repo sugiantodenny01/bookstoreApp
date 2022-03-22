@@ -43,7 +43,8 @@ type SalesByIdResponse struct {
 	Book_Title      string
 	Author_ID       int
 	Quantity        int
-	Price_Per_Unit  string
+	Price_Per_Unit  int
+	Total_Price     int
 	Created_Time    int
 }
 

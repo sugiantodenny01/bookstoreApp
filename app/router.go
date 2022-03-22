@@ -35,9 +35,11 @@ func NewRouter(authorController controller.AuthorController, bookController cont
 	router.Get("/book/get/:id", bookController.GetBookByIdController)
 	router.Post("/book/update/:id", middleware.IsAuthenticatedAccessToken, bookController.UpdateMyBookController)
 	router.Post("/book/update_cover/:id", middleware.IsAuthenticatedAccessToken, bookController.UpdateCoverBookController)
+	router.Delete("/book/delete/:id", middleware.IsAuthenticatedAccessToken, bookController.DeleteBookController)
 
 	//sales
 	router.Post("/sales/add", middleware.IsAuthenticatedAccessToken, salesController.AddSalesController)
+	router.Get("/sales/get/:id", middleware.IsAuthenticatedAccessToken, salesController.MySalesGetByIdController)
 
 	return router
 }

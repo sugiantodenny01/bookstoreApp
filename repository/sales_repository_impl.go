@@ -3,6 +3,7 @@ package repository
 import (
 	"database/sql"
 	"errors"
+	"github.com/sugiantodenny01/bookstoreApp/model"
 	"github.com/sugiantodenny01/bookstoreApp/model/web"
 )
 
@@ -52,4 +53,19 @@ func (s *SalesRepositoryImpl) AddSalesRepository(tx *sql.Tx, sales web.SalesAddR
 
 	return nil
 
+}
+
+func (s *SalesRepositoryImpl) GetInformationSalesById(tx *sql.Tx, sales model.Sales) (web.SalesByIdResponse, error) {
+
+	var salesResponse web.SalesByIdResponse
+	SQL := "select Sales_ID, Recipient_Name, Recipient_Email, Book_Title Author_ID, Quantity, Price_Per_Unit, Total_Price, Created_Time from sales where Sales_ID = (?)"
+	resultCheckExists := tx.QueryRow(SQL, sales.Sales_ID)
+	errorResultCheckExists := resultCheckExists.Scan(&salesResponse.Sales_ID, salesResponse.Recipient_Name, salesResponse.Recipient_Email, salesResponse.Book_Title, salesResponse.Author_ID, salesResponse.Quantity, salesResponse.Price_Per_Unit, salesResponse.Total_Price, salesResponse.Created_Time)
+
+	if errorResultCheckExists == sql.ErrNoRows {
+		err := errors.New("error_id_not_found")
+		return salesResponse, err
+	}
+
+	return salesResponse, nil
 }

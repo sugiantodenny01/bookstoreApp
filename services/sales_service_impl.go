@@ -5,6 +5,7 @@ import (
 	"errors"
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v4"
+	"github.com/sugiantodenny01/bookstoreApp/model"
 	"github.com/sugiantodenny01/bookstoreApp/model/web"
 	"github.com/sugiantodenny01/bookstoreApp/repository"
 )
@@ -55,5 +56,31 @@ func (s *SalesServiceImpl) AddSalesService(sales web.SalesAddRequest, c *fiber.C
 	}
 
 	return nil
+
+}
+func (s *SalesServiceImpl) GetMySalesByIdService(sales model.Sales, c *fiber.Ctx) (web.SalesByIdResponse, error) {
+
+	var mock web.SalesByIdResponse
+	user := c.Locals("user").(*jwt.Token)
+	claims := user.Claims.(jwt.MapClaims)
+	authorId := int(claims["Author_ID"].(float64))
+
+	tx, err := s.DB.Begin()
+
+	if err != nil {
+		return mock, errors.New("error_internal_server")
+	}
+
+	salesInformation := model.Sales{
+		Author_ID: authorId,
+		Sales_ID:  sales.Sales_ID,
+	}
+
+	dataSales, err := s.salesRepo.GetInformationSalesById(tx, salesInformation)
+	if err != nil {
+		return mock, err
+	}
+
+	return dataSales, nil
 
 }
