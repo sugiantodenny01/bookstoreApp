@@ -14,4 +14,5 @@ type AuthorService interface {
 	RefreshTokenService(token web.RefreshTokenRequest) (map[string]string, error)
 	UpdateProfileAuthorService(ax *web.AuthorUpdateProfileRequest, c *fiber.Ctx) error
 	AuthorProfileService(c *fiber.Ctx) (map[string]string, error)
+	DeleteAuthorService(c *fiber.Ctx) error
 }

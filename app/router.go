@@ -14,6 +14,9 @@ func NewRouter(authorController controller.AuthorController, bookController cont
 		return c.SendString("Hello, World!")
 	})
 
+	//load assets
+	router.Static(conf.Host+"/assets/", "./assets")
+
 	//Author
 	router.Post(conf.Host+"/author/register", authorController.RegisterController)
 	router.Post(conf.Host+"/author/login", authorController.LoginController)
@@ -23,10 +26,14 @@ func NewRouter(authorController controller.AuthorController, bookController cont
 	router.Post(conf.Host+"/author/refresh_token", authorController.RefreshTokenController)
 	router.Put(conf.Host+"/author/update", middleware.IsAuthenticatedAccessToken, authorController.UpdateProfileAuthorController)
 	router.Get(conf.Host+"/author/get_my_profile", middleware.IsAuthenticatedAccessToken, authorController.AuthorProfileController)
-	router.Static(conf.Host+"/assets/", "./assets")
+	router.Delete(conf.Host+"/author/delete", middleware.IsAuthenticatedAccessToken, authorController.DeleteAuthorController)
 
 	//Book
 	router.Post(conf.Host+"/book/add", middleware.IsAuthenticatedAccessToken, bookController.AddBookController)
+	router.Get(conf.Host+"/book/get", bookController.GetAllBookController)
+	router.Get(conf.Host+"/book/get_my_book", middleware.IsAuthenticatedAccessToken, bookController.GetMyBookController)
+	router.Get(conf.Host+"/book/get/:id", bookController.GetBookByIdController)
+	router.Post(conf.Host+"/book/update/:id", middleware.IsAuthenticatedAccessToken, bookController.UpdateMyBookController)
 
 	return router
 }

@@ -19,7 +19,7 @@ func main() {
 
 	//Book
 	bookRepository := repository.NewBookRepository()
-	bookService := services.NewBookService(bookRepository, db)
+	bookService := services.NewBookService(bookRepository, db, conf.Port_App, conf.Host)
 	bookController := controller.NewBookController(bookService)
 
 	router := app.NewRouter(categoryController, bookController)

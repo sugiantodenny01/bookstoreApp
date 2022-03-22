@@ -8,3 +8,7 @@ type AddBookRequest struct {
 	Cover_Image     string `json:"Cover_Image_Base64"`
 	Image_Extension string `json:"Image_Extension"`
 }
+
+type GetBookByIdRequest struct {
+	Book_ID int `json:"id"`
+}

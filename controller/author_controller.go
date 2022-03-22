@@ -11,4 +11,5 @@ type AuthorController interface {
 	RefreshTokenController(c *fiber.Ctx) error
 	UpdateProfileAuthorController(c *fiber.Ctx) error
 	AuthorProfileController(c *fiber.Ctx) error
+	DeleteAuthorController(c *fiber.Ctx) error
 }

@@ -63,7 +63,7 @@ func (ax *AuthorControllerImpl) LoginController(c *fiber.Ctx) error {
 		return c.JSON(getInformationError)
 	}
 
-	result := web.SuccessLoginResponse(data)
+	result := web.SuccessResponse(data)
 	return c.JSON(result)
 
 }
@@ -95,7 +95,7 @@ func (ax *AuthorControllerImpl) ForgotPasswordController(c *fiber.Ctx) error {
 		}
 	}
 
-	result := web.SuccessLoginResponse(data)
+	result := web.SuccessResponse(data)
 	return c.JSON(result)
 
 }
@@ -165,7 +165,7 @@ func (ax *AuthorControllerImpl) RefreshTokenController(c *fiber.Ctx) error {
 
 	}
 
-	result := web.SuccessLoginResponse(data)
+	result := web.SuccessResponse(data)
 	return c.JSON(result)
 }
 
@@ -224,6 +224,30 @@ func (ax *AuthorControllerImpl) AuthorProfileController(c *fiber.Ctx) error {
 
 	}
 
-	result := web.SuccessLoginResponse(data)
+	result := web.SuccessResponse(data)
 	return c.JSON(result)
+}
+
+func (ax *AuthorControllerImpl) DeleteAuthorController(c *fiber.Ctx) error {
+
+	err := ax.AuthorService.DeleteAuthorService(c)
+
+	if err != nil {
+
+		if err.Error() == "error_internal_server" {
+			getInformationError := web.ToFailResponse(err, "Error Selain yang tercantum di sini")
+			return c.JSON(getInformationError)
+
+		} else if err.Error() == "error_author_id_not_found" {
+			getInformationError := web.ToFailResponse(err, "Error ID yang di supply tidak ada di database")
+			return c.JSON(getInformationError)
+
+		} else {
+			getInformationError := web.ToFailResponse(err, "Error Selain yang tercantum di sini")
+			return c.JSON(getInformationError)
+		}
+
+	}
+
+	return c.JSON(map[string]string{"message": "Success"})
 }

@@ -77,7 +77,7 @@ func (service *CategoryServiceImpl) LoginService(request web.AuthorLoginRequest)
 	claims["Name"] = author.Name
 	claims["Pen_Name"] = author.Pen_Name
 	claims["Email"] = author.Email
-	claims["exp"] = time.Now().Add(time.Second * 30).Unix()
+	claims["exp"] = time.Now().Add(time.Minute * 15).Unix()
 	t, err := token.SignedString([]byte("accessToken"))
 	if err != nil {
 		err = errors.New("error_internal_server")
@@ -90,7 +90,7 @@ func (service *CategoryServiceImpl) LoginService(request web.AuthorLoginRequest)
 	rtClaims["Name"] = author.Name
 	rtClaims["Pen_Name"] = author.Pen_Name
 	rtClaims["Email"] = author.Email
-	rtClaims["exp"] = time.Now().Add(time.Second * 30).Unix()
+	rtClaims["exp"] = time.Now().Add(time.Hour * 24).Unix()
 
 	rt, err := refreshToken.SignedString([]byte("refreshToken"))
 	if err != nil {
@@ -190,7 +190,7 @@ func (service *CategoryServiceImpl) RefreshTokenService(tokenReq web.RefreshToke
 		newClaims["Name"] = authorName
 		newClaims["Pen_Name"] = authorPenName
 		newClaims["Email"] = authorEmail
-		newClaims["exp"] = time.Now().Add(time.Second * 40).Unix()
+		newClaims["exp"] = time.Now().Add(time.Minute * 15).Unix()
 		t, err := NewToken.SignedString([]byte("accessToken"))
 		if err != nil {
 			err = errors.New("error_internal_server")
@@ -283,4 +283,31 @@ func (service *CategoryServiceImpl) AuthorProfileService(c *fiber.Ctx) (map[stri
 
 	return mappingData, nil
 
+}
+
+func (service *CategoryServiceImpl) DeleteAuthorService(c *fiber.Ctx) error {
+
+	user := c.Locals("user").(*jwt.Token)
+	claims := user.Claims.(jwt.MapClaims)
+	authorId := int(claims["Author_ID"].(float64))
+
+	tx, err := service.DB.Begin()
+
+	if err != nil {
+		return errors.New("error_internal_server")
+	}
+
+	authorInformation := model.Author{
+		Author_ID:   authorId,
+		Is_Disabled: true,
+	}
+
+	err = service.AuthorRepository.DeleteAuthorRepository(tx, authorInformation)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	tx.Commit()
+	return nil
 }

@@ -13,4 +13,5 @@ type AuthorRepository interface {
 	ChangePasswordRepository(tx *sql.Tx, author model.Author, newPassword string) error
 	UpdateAuthorRepository(tx *sql.Tx, author web.AuthorUpdateProfileRequest) error
 	AuthorProfileRepository(tx *sql.Tx, author model.Author) (web.AuthorProfileResponse, error)
+	DeleteAuthorRepository(tx *sql.Tx, author model.Author) error
 }

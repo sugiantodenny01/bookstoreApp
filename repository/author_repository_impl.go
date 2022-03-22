@@ -169,3 +169,27 @@ func (repo *AuthorRepositoryImpl) AuthorProfileRepository(tx *sql.Tx, ar model.A
 	return author, nil
 
 }
+
+func (repo *AuthorRepositoryImpl) DeleteAuthorRepository(tx *sql.Tx, ar model.Author) error {
+
+	var author model.Author
+	SQL := "select Author_ID from author where Author_ID = (?)"
+	resultCheckEmailExists := tx.QueryRow(SQL, ar.Author_ID)
+	errorResultCheckEmailExists := resultCheckEmailExists.Scan(&author.Author_ID)
+
+	if errorResultCheckEmailExists == sql.ErrNoRows {
+		err := errors.New("error_author_id_not_found")
+		return err
+	}
+
+	SQLUpdate := "update author set Is_Disabled = (?) where Author_ID = (?)"
+	_, err := tx.Exec(SQLUpdate, ar.Is_Disabled, ar.Author_ID)
+
+	if err != nil {
+		err := errors.New("error_internal_server")
+		return err
+	}
+
+	return nil
+
+}

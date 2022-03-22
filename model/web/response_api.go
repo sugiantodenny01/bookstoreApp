@@ -2,7 +2,13 @@ package web
 
 type LoginResponse struct {
 	Message string
-	Data    map[string]string
+	Data    interface{}
+}
+
+type BookResponsePage struct {
+	Message         string
+	Data            interface{}
+	Pagination_Data interface{}
 }
 
 type FailResponse struct {
@@ -19,11 +25,38 @@ type AuthorProfileResponse struct {
 	Email     string
 }
 
-func SuccessLoginResponse(data map[string]string) LoginResponse {
+type BookResponse struct {
+	Book_ID         int
+	Author_ID       int
+	Title           string
+	Summary         string
+	Stock           int
+	Price           int
+	Cover_URL       string
+	Author_Pen_name string
+}
+
+type PageInfo struct {
+	Current_Page      int
+	Max_Data_Per_Page int
+	Max_Page          int
+	Total_All_Data    int
+}
+
+func SuccessResponse(data interface{}) LoginResponse {
 	var res LoginResponse
 	res.Message = "Success"
 	res.Data = data
 	return res
+}
+
+func SuccessBookByPage(data interface{}, pageInfo interface{}) BookResponsePage {
+	var res BookResponsePage
+	res.Message = "Success"
+	res.Data = data
+	res.Pagination_Data = pageInfo
+	return res
+
 }
 
 func ToFailResponse(err error, information string) FailResponse {
