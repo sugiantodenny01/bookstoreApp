@@ -8,4 +8,6 @@ type BookController interface {
 	GetAllBookController(c *fiber.Ctx) error
 	GetMyBookController(c *fiber.Ctx) error
 	UpdateMyBookController(c *fiber.Ctx) error
+	UpdateCoverBookController(c *fiber.Ctx) error
+	DeleteBookController(c *fiber.Ctx) error
 }

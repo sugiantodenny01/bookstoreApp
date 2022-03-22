@@ -34,6 +34,7 @@ func NewRouter(authorController controller.AuthorController, bookController cont
 	router.Get(conf.Host+"/book/get_my_book", middleware.IsAuthenticatedAccessToken, bookController.GetMyBookController)
 	router.Get(conf.Host+"/book/get/:id", bookController.GetBookByIdController)
 	router.Post(conf.Host+"/book/update/:id", middleware.IsAuthenticatedAccessToken, bookController.UpdateMyBookController)
+	router.Post(conf.Host+"/book/update_cover/:id", middleware.IsAuthenticatedAccessToken, bookController.UpdateCoverBookController)
 
 	return router
 }

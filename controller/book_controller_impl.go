@@ -172,3 +172,78 @@ func (ax *BookControllerImpl) UpdateMyBookController(c *fiber.Ctx) error {
 	return c.JSON(map[string]string{"message": "Success"})
 
 }
+
+func (ax *BookControllerImpl) UpdateCoverBookController(c *fiber.Ctx) error {
+
+	var book web.UpdateCoverBookRequest
+
+	idString := c.Params("id")
+	if idString == "" {
+		err := errors.New("error_param")
+		getInformationError := web.ToFailResponse(err, "Ketentuan Path Param / Query Param  untuk Pemanggilan API tidak sesuai")
+		return c.JSON(getInformationError)
+	}
+
+	idInt, _ := strconv.Atoi(idString)
+	book.Book_ID = idInt
+
+	err := c.BodyParser(&book)
+
+	if err != nil {
+		err = errors.New("error_param")
+		getInformationError := web.ToFailResponse(err, "Ketentuan Path Param / Query Param  untuk Pemanggilan API tidak sesuai")
+		return c.JSON(getInformationError)
+	}
+
+	err = ax.BookService.UpdateCoverBookService(book, c)
+	if err != nil {
+
+		if err.Error() == "error_internal_server" {
+			getInformationError := web.ToFailResponse(err, "Error Selain yang tercantum di sini")
+			return c.JSON(getInformationError)
+		} else if err.Error() == "error_author_id_not_found" {
+			getInformationError := web.ToFailResponse(err, "Error ID yang di supply tidak ada di database")
+			return c.JSON(getInformationError)
+		} else {
+			getInformationError := web.ToFailResponse(err, "Error Selain yang tercantum di sini")
+			return c.JSON(getInformationError)
+		}
+
+	}
+
+	return c.JSON(map[string]string{"message": "Success"})
+
+}
+
+func (ax *BookControllerImpl) DeleteBookController(c *fiber.Ctx) error {
+	var book model.Book
+
+	idString := c.Params("id")
+	if idString == "" {
+		err := errors.New("error_param")
+		getInformationError := web.ToFailResponse(err, "Ketentuan Path Param / Query Param  untuk Pemanggilan API tidak sesuai")
+		return c.JSON(getInformationError)
+	}
+
+	idInt, _ := strconv.Atoi(idString)
+	book.Book_ID = idInt
+
+	err := ax.BookService.DeleteBookService(book, c)
+	if err != nil {
+
+		if err.Error() == "error_internal_server" {
+			getInformationError := web.ToFailResponse(err, "Error Selain yang tercantum di sini")
+			return c.JSON(getInformationError)
+		} else if err.Error() == "error_id_not_found" {
+			getInformationError := web.ToFailResponse(err, "Error ID yang di supply tidak ada di database")
+			return c.JSON(getInformationError)
+		} else {
+			getInformationError := web.ToFailResponse(err, "Error Selain yang tercantum di sini")
+			return c.JSON(getInformationError)
+		}
+
+	}
+
+	return c.JSON(map[string]string{"message": "Success"})
+
+}

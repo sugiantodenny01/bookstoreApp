@@ -12,4 +12,6 @@ type BookService interface {
 	GetAllBookService(page string, max string) ([]web.BookResponse, web.PageInfo, error)
 	GetMyBookService(page string, max string, c *fiber.Ctx) ([]web.BookResponse, web.PageInfo, error)
 	UpdateBookService(book model.Book, c *fiber.Ctx) error
+	UpdateCoverBookService(request web.UpdateCoverBookRequest, c *fiber.Ctx) error
+	DeleteBookService(book model.Book, c *fiber.Ctx) error
 }

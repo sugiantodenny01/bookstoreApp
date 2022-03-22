@@ -12,4 +12,6 @@ type BookRepository interface {
 	GetAllBookRepository(tx *sql.Tx, max int) ([]web.BookResponse, int, error)
 	GetMyBookRepository(tx *sql.Tx, authorID int, max int) ([]web.BookResponse, int, error)
 	UpdateBookRepository(tx *sql.Tx, book model.Book) (model.Book, error)
+	UpdateCoverBookRepository(tx *sql.Tx, book model.Book) (model.Book, error)
+	DeleteBookRepository(tx *sql.Tx, book model.Book) error
 }

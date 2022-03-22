@@ -5,6 +5,9 @@ import (
 	"errors"
 	"github.com/sugiantodenny01/bookstoreApp/model"
 	"github.com/sugiantodenny01/bookstoreApp/model/web"
+	"os"
+	"strconv"
+	"strings"
 	"time"
 )
 
@@ -166,5 +169,55 @@ func (b *BookRepositoryImpl) UpdateBookRepository(tx *sql.Tx, book model.Book) (
 	}
 
 	return book, nil
+
+}
+
+func (b *BookRepositoryImpl) UpdateCoverBookRepository(tx *sql.Tx, book model.Book) (model.Book, error) {
+
+	var mock model.Book
+
+	SQL := "select Author_ID, Cover_URL from book where Book_ID = (?)"
+	resultCheckExists := tx.QueryRow(SQL, book.Book_ID)
+	errorResultCheckExists := resultCheckExists.Scan(&book.Author_ID, &mock.Cover_URL)
+
+	if errorResultCheckExists == sql.ErrNoRows {
+		err := errors.New("error_author_id_not_found")
+		return mock, err
+	}
+
+	//remove old image
+	path, _ := os.Getwd()
+	fileImageOld := strings.Replace(mock.Cover_URL, "/", `\`, -1)
+	pathImage := path + fileImageOld
+	err := os.Remove(pathImage)
+
+	if err != nil {
+		return mock, err
+	}
+
+	SQLUpdate := "update book set Cover_URL = (?) where Book_ID = (?)"
+	_, err = tx.Exec(SQLUpdate, book.Cover_URL, book.Book_ID)
+
+	if err != nil {
+		err := errors.New("error_internal_server")
+		return mock, err
+	}
+
+	return book, nil
+
+}
+
+func (b *BookRepositoryImpl) DeleteBookRepository(tx *sql.Tx, book model.Book) error {
+
+	SQL := "delete from book where Book_ID = (?)"
+	bookIdString := strconv.Itoa(book.Book_ID)
+	_, err := tx.Query(SQL, bookIdString)
+
+	if err != nil {
+		err := errors.New("error_id_not_found")
+		return err
+	}
+
+	return nil
 
 }
