@@ -5,5 +5,4 @@
   "DB_HOST"     : "127.0.0.1",
   "DB_NAME"     : "bookstore",
   "Port_App"    : "localhost:12345"
-
 }
